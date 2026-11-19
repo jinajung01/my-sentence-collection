@@ -1,4 +1,4 @@
-// 내 문장 모음 — 팝업
+// 문장 서랍 — 팝업
 
 // 문의 메일 주소: 이 한 줄만 바꾸면 됩니다
 const CONTACT_EMAIL = "you@example.com";
@@ -218,7 +218,7 @@ function renderList() {
   if (!sentences.length) {
     const e = el("div", "empty");
     const ol = el("ol");
-    ["웹페이지에서 문장을 드래그해 선택", "마우스 오른쪽 버튼 클릭", "‘내 문장 모음에 저장’ 누르기"].forEach((t, i) => {
+    ["웹페이지에서 문장을 드래그해 선택", "마우스 오른쪽 버튼 클릭", "‘문장 서랍에 저장’ 누르기"].forEach((t, i) => {
       const li = el("li"); li.append(el("b", "", String(i + 1)), t); ol.append(li);
     });
     e.append(el("h2", "", "아직 모은 문장이 없어요"), el("p", "", "이렇게 저장해 보세요."), ol);
@@ -318,7 +318,7 @@ markSeen();
 
 // 하단 email: 주소는 누를 때만 보입니다
 $("emailAddr").textContent = CONTACT_EMAIL;
-$("emailLink").href = "mailto:" + CONTACT_EMAIL + "?subject=" + encodeURIComponent("[내 문장 모음] 문의");
+$("emailLink").href = "mailto:" + CONTACT_EMAIL + "?subject=" + encodeURIComponent("[문장 서랍] 문의");
 $("emailBtn").addEventListener("click", () => {
   const open = $("contact").hidden;
   $("contact").hidden = !open;

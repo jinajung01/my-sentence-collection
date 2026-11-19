@@ -1,11 +1,11 @@
-// 내 문장 모음 — 백그라운드 (우클릭 메뉴, 저장, 아이콘 숫자)
+// 문장 서랍 — 백그라운드 (우클릭 메뉴, 저장, 아이콘 숫자)
 const MENU_ID = "save-sentence";
 
 function createMenu() {
   chrome.contextMenus.removeAll(() => {
     chrome.contextMenus.create({
       id: MENU_ID,
-      title: "내 문장 모음에 저장: \"%s\"",
+      title: "문장 서랍에 저장: \"%s\"",
       contexts: ["selection"] // 글자를 선택했을 때만 메뉴가 보입니다
     });
   });

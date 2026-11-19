@@ -1,14 +1,24 @@
 {
   "manifest_version": 3,
-  "name": "내 문장 모음",
+  "name": "문장 서랍",
   "version": "1.0.0",
-  "description": "마우스 우클릭으로 선택한 문장을 출처와 함께 저장합니다.",
+  "description": "우클릭 한 번으로 마음에 드는 문장을 출처와 함께 저장하고, 형광펜과 태그로 정리합니다.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
   "permissions": ["contextMenus", "storage"],
   "background": {
     "service_worker": "background.js"
   },
   "action": {
-    "default_title": "내 문장 모음",
+    "default_title": "문장 서랍",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    },
     "default_popup": "popup.html"
   }
 }
