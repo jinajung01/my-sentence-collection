@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "내 문장 모음",
+  "version": "1.0.0",
+  "description": "마우스 우클릭으로 선택한 문장을 출처와 함께 저장합니다.",
+  "permissions": ["contextMenus", "storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "내 문장 모음",
+    "default_popup": "popup.html"
+  }
+}

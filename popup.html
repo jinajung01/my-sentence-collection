@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>내 문장 모음</title>
+  <style>
+    :root {
+      --bg: #f7f8fb; --surface: #ffffff; --raised: #f1f3f8; --ink: #172036; --muted: #5d6679; --line: #dde1ea;
+      --accent: #2f4fd8; --accent-ink: #ffffff; --accent-soft: #e8ecfd; --mark: #ffe27a;
+      --danger: #c93434; --danger-soft: #fdecec; --ok: #1f8a4c; --ok-soft: #e3f5ea; --pop: #172036; --pop-ink: #ffffff;
+      --f-body: "Segoe UI", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+      --f-quote: "Batang", "AppleMyungjo", Georgia, serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #11141c; --surface: #181c26; --raised: #1f2430; --ink: #e6e9f2; --muted: #959db1; --line: #2b3142;
+        --accent: #93a6ff; --accent-ink: #11141c; --accent-soft: #252d4c; --mark: #5e5114;
+        --danger: #ff8080; --danger-soft: #3a1d22; --ok: #63d491; --ok-soft: #173326; --pop: #e6e9f2; --pop-ink: #11141c;
+        color-scheme: dark;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; width: 380px; background: var(--bg); color: var(--ink); font: 13px/1.5 var(--f-body); }
+    button, input, select { font: inherit; color: inherit; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    [hidden] { display: none !important; }
+
+    header { background: var(--surface); padding: 14px 16px 12px; border-bottom: 1px solid var(--line); display: grid; gap: 10px; }
+    .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .title { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 15px; }
+    .logo { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 6px; background: var(--accent); color: var(--accent-ink); font-family: var(--f-quote); font-weight: 700; font-size: 14px; }
+    .count { font-size: 11px; font-weight: 500; background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 1px 8px; }
+    .version { font-size: 11px; font-weight: 400; color: var(--muted); }
+    .clear { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 12px; padding: 4px 6px; border-radius: 6px; }
+    .clear:hover:not(:disabled) { color: var(--danger); background: var(--danger-soft); }
+    .clear:disabled { opacity: .45; cursor: default; }
+    .search { width: 100%; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--raised); font-size: 13px; }
+    .search:disabled { opacity: .55; }
+
+    .confirm { background: var(--danger-soft); border-radius: 8px; padding: 10px 12px; display: grid; gap: 8px; }
+    .confirm small { display: block; color: var(--muted); }
+    .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .btn { border: 0; border-radius: 7px; padding: 5px 10px; cursor: pointer; font-size: 12px; font-weight: 500; }
+    .btn.danger { background: var(--danger); color: var(--surface); }
+    .btn.ghost { background: var(--surface); border: 1px solid var(--line); }
+    .btn.soft { background: var(--accent-soft); color: var(--accent); }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .chip { border: 1px solid var(--line); background: var(--surface); color: var(--muted); border-radius: 999px; padding: 3px 10px; font-size: 12px; cursor: pointer; }
+    .chip b { font-weight: 500; opacity: .75; margin-left: 4px; }
+    .chip:hover { border-color: var(--accent); }
+    .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+    .chip.plain { border-color: transparent; background: none; padding-inline: 4px; }
+    .chip.plain:hover { color: var(--accent); }
+    .chip.warn { border-color: transparent; background: none; color: var(--danger); margin-left: auto; padding-inline: 4px; }
+    .tag-input { border: 1px solid var(--accent); border-radius: 999px; padding: 3px 10px; font-size: 12px; width: 130px; background: var(--surface); }
+    .error { color: var(--danger); font-size: 12px; }
+
+    main { padding: 12px; display: grid; gap: 10px; max-height: 400px; overflow-y: auto; }
+    .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; gap: 10px; }
+    .quote { margin: 0; font-family: var(--f-quote); font-size: 15px; line-height: 1.7; word-break: keep-all; overflow-wrap: anywhere; }
+    .quote mark { background: linear-gradient(transparent 55%, var(--mark) 55%); color: inherit; cursor: pointer; }
+    .src { display: flex; align-items: baseline; gap: 6px; min-width: 0; font-size: 12px; text-decoration: none; color: var(--accent); }
+    .src-t { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .src-d { flex: none; font-size: 11px; color: var(--muted); }
+    span.src { color: var(--muted); }
+    a.src:hover .src-t { text-decoration: underline; }
+    .meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .meta-l { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .date { color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .tagsel { appearance: none; -webkit-appearance: none; border: 0; border-radius: 999px; padding: 2px 9px; font-size: 11px; font-weight: 500; cursor: pointer; background: var(--accent-soft); color: var(--accent); max-width: 120px; }
+    .tagsel.none { background: transparent; color: var(--muted); padding: 2px 4px; }
+    .tagsel.none:hover { color: var(--accent); }
+    .acts { display: flex; gap: 2px; }
+    .acts button { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 12px; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+    .acts .copy:hover { background: var(--accent-soft); color: var(--accent); }
+    .acts .copy.done { background: var(--ok-soft); color: var(--ok); }
+    .acts .del:hover { background: var(--danger-soft); color: var(--danger); }
+
+    .empty { text-align: center; padding: 22px 12px; display: grid; gap: 8px; justify-items: center; }
+    .empty h2 { margin: 0; font-size: 15px; }
+    .empty p { margin: 0; color: var(--muted); }
+    .empty ol { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; text-align: left; }
+    .empty li { display: flex; gap: 8px; align-items: center; }
+    .empty li b { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 11px; flex: none; }
+
+    .hl-btn { position: fixed; z-index: 10; transform: translateX(-50%); border: 0; border-radius: 8px; padding: 6px 10px; font-size: 12px; cursor: pointer; background: var(--pop); color: var(--pop-ink); box-shadow: 0 6px 16px rgba(0,0,0,.2); }
+
+    footer { border-top: 1px solid var(--line); background: var(--surface); padding: 8px 16px; display: grid; gap: 6px; font-size: 11px; color: var(--muted); }
+    .brand { display: flex; align-items: center; justify-content: center; gap: 6px; }
+    footer .logo { width: 16px; height: 16px; font-size: 10px; border-radius: 4px; }
+    .email-btn { border: 0; background: none; color: var(--accent); cursor: pointer; font-size: 11px; padding: 0 2px; }
+    .email-btn:hover { text-decoration: underline; }
+    .contact { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; }
+    .contact .addr { user-select: all; color: var(--ink); font-size: 12px; }
+    .contact a, .contact button { border: 0; background: var(--accent-soft); color: var(--accent); border-radius: 6px; padding: 2px 8px; font-size: 11px; cursor: pointer; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top">
+      <div class="title"><span class="logo">❝</span>내 문장 모음<span class="count" id="count" hidden></span><span class="version" id="version"></span></div>
+      <button class="clear" id="clearAll" type="button">전체 삭제</button>
+    </div>
+    <div class="confirm" id="confirm" hidden></div>
+    <input class="search" id="search" type="search" placeholder="문장이나 출처로 찾기" aria-label="문장 검색">
+    <div class="chips" id="chips" hidden></div>
+  </header>
+
+  <main id="list"></main>
+
+  <footer>
+    <div class="brand"><span class="logo">❝</span>내 문장 모음 · <button class="email-btn" id="emailBtn" type="button" aria-expanded="false">email</button></div>
+    <div class="contact" id="contact" hidden>
+      <span class="addr" id="emailAddr"></span>
+      <button type="button" id="emailCopy">복사</button>
+      <a id="emailLink" target="_blank" rel="noopener">메일 쓰기</a>
+    </div>
+  </footer>
+
+  <button class="hl-btn" id="hlBtn" type="button" hidden>형광펜 긋기</button>
+
+  <script src="popup.js"></script>
+</body>
+</html>
